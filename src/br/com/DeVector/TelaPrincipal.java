@@ -266,16 +266,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_txtStateActionPerformed
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
-        txtName.setText("");
-        txtCPF.setText("");
-        txtPhoneNumber.setText("");
-        txtAdress.setText("");
-        txtCity.setText("");
-        txtState.setText("");
+        clearFields();
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
@@ -307,11 +302,17 @@ public class TelaPrincipal extends javax.swing.JFrame {
                     + "\nEstado: " + estado, 
                 "SUCESSO", 
                 JOptionPane.INFORMATION_MESSAGE);
+                model.addRow(new Object[]{cliente.getNome(), 
+                    cliente.getCpf(), 
+                    cliente.getTel(), 
+                    cliente.getCidade()});
+                clearFields();
             } else {
                 JOptionPane.showMessageDialog(null, 
                         "Cliente ja cadastrado no sistema!!",
                         "ERRO",
                         JOptionPane.INFORMATION_MESSAGE);
+                clearFields();
             }
             
             
@@ -391,8 +392,20 @@ public class TelaPrincipal extends javax.swing.JFrame {
     private void initCustomsComponents(){
         model.addColumn("Nome");
         model.addColumn("CPF");
+        model.addColumn("Telefone");
+        model.addColumn("Cidade");
+        
         
         tbClientes.setModel(model);
+    }
+    
+    private void clearFields(){
+        txtName.setText("");
+        txtCPF.setText("");
+        txtPhoneNumber.setText("");
+        txtAdress.setText("");
+        txtCity.setText("");
+        txtState.setText("");
     }
 
 
