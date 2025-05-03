@@ -119,6 +119,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
         });
 
         btnAlter.setText("Alterar");
+        btnAlter.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlterActionPerformed(evt);
+            }
+        });
 
         btnSave.setText("Salvar");
         btnSave.addActionListener(new java.awt.event.ActionListener() {
@@ -350,13 +355,46 @@ public class TelaPrincipal extends javax.swing.JFrame {
         
         Cliente cliente = this.clienteDAO.consultar(cpf);
         
-        txtName.setText(cliente.getNome());
-        txtCPF.setText((cliente.getCpf()).toString());
-        txtPhoneNumber.setText((cliente.getTel()).toString());
-        txtAdress.setText(cliente.getEnd());
-        txtCity.setText(cliente.getCidade());
-        txtState.setText(cliente.getEstado());
+        preencherCampos(cliente);
     }//GEN-LAST:event_tbClientesMouseClicked
+
+    private void btnAlterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterActionPerformed
+        int rowSelect = tbClientes.getSelectedRow();
+        
+        if (rowSelect >= 0) {
+            Long cpf = (Long) tbClientes.getValueAt(rowSelect, 1);
+            String name = txtName.getText();
+            String tel = txtPhoneNumber.getText();
+            String end = txtAdress.getText();
+            String cidade = txtCity.getText();
+            String estado = txtState.getText();
+            
+             if (!isFieldValides(name, cpf.toString(), tel, end, cidade, estado)){
+                JOptionPane.showMessageDialog(null, 
+                    "Exitem campos vazios", 
+                    "Atenção", 
+                    JOptionPane.INFORMATION_MESSAGE);
+             }
+             
+             Cliente clienteNew = new Cliente(name, cpf.toString(), tel, end, cidade, estado);
+             this.clienteDAO.alterar(clienteNew);
+             
+             model.removeRow(rowSelect);
+             model.addRow(new Object[]{clienteNew.getNome(), 
+                 clienteNew.getCpf(), 
+                 clienteNew.getTel(), 
+                 clienteNew.getCidade()
+             });
+             
+             JOptionPane.showMessageDialog(null, 
+                    "Cliente atualizado com sucesso!!!", 
+                    "Sucesso", 
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
+        
+       
+        
+    }//GEN-LAST:event_btnAlterActionPerformed
 
     /**
      * @param args the command line arguments
@@ -445,9 +483,19 @@ public class TelaPrincipal extends javax.swing.JFrame {
         txtState.setText("");
     }
 
-    private String paramString(Long tel) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    private void preencherCampos(Cliente cliente){
+        
+        txtName.setText(cliente.getNome());
+        txtCPF.setText((cliente.getCpf()).toString());
+        txtPhoneNumber.setText((cliente.getTel()).toString());
+        txtAdress.setText(cliente.getEnd());
+        txtCity.setText(cliente.getCidade());
+        txtState.setText(cliente.getEstado());
+        
     }
-
+    
+    private void atualizarCliente(){
+                
+    }
 
 }
