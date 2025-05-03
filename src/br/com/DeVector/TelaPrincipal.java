@@ -138,6 +138,11 @@ public class TelaPrincipal extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tbClientes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbClientesMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbClientes);
 
         jMenu1.setText("Opções");
@@ -270,7 +275,25 @@ public class TelaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        int rowSelect = tbClientes.getSelectedRow();
+        Long cpf = (Long) tbClientes.getValueAt(rowSelect, 1);
         
+        Cliente cliente = clienteDAO.consultar(cpf);
+        
+        int result = JOptionPane.showConfirmDialog(this, 
+                "Deseja realmente deletar o cliente " + cliente.getNome(), 
+                "Deletar",
+                JOptionPane.YES_NO_OPTION,
+                JOptionPane.QUESTION_MESSAGE);
+        if (result == JOptionPane.YES_OPTION){
+            clienteDAO.excluir(cpf);
+            JOptionPane.showMessageDialog(null, 
+                    cliente.getNome() + " deletado com sucesso.",
+                    "Sucesso",
+                    JOptionPane.INFORMATION_MESSAGE);
+            model.removeRow(rowSelect);
+            clearFields();
+        }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
@@ -320,6 +343,20 @@ public class TelaPrincipal extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void tbClientesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbClientesMouseClicked
+        int rowSelect = tbClientes.getSelectedRow();
+        Long cpf = (Long) tbClientes.getValueAt(rowSelect, 1);
+        
+        Cliente cliente = this.clienteDAO.consultar(cpf);
+        
+        txtName.setText(cliente.getNome());
+        txtCPF.setText((cliente.getCpf()).toString());
+        txtPhoneNumber.setText((cliente.getTel()).toString());
+        txtAdress.setText(cliente.getEnd());
+        txtCity.setText(cliente.getCidade());
+        txtState.setText(cliente.getEstado());
+    }//GEN-LAST:event_tbClientesMouseClicked
 
     /**
      * @param args the command line arguments
@@ -406,6 +443,10 @@ public class TelaPrincipal extends javax.swing.JFrame {
         txtAdress.setText("");
         txtCity.setText("");
         txtState.setText("");
+    }
+
+    private String paramString(Long tel) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
 
